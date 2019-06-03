@@ -1,3 +1,5 @@
+package dto;
+
 /**
  * @program: spring
  * @description:
@@ -38,7 +40,7 @@ public class UserInfo {
 
 	@Override
 	public String toString() {
-		return "UserInfo{" +
+		return "dto.UserInfo{" +
 				"name='" + name + '\'' +
 				", addr='" + addr + '\'' +
 				", age=" + age +

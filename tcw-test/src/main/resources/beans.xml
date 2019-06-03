@@ -4,6 +4,10 @@
 		xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="userInfo" class="UserInfo"/>
+	<bean id="userService" class="service.impl.UserServiceImpl"/>
+
+	<bean id="userControler" class="controler.UserControler">
+		<property name="userService" ref="userService"></property>
+	</bean>
 
 </beans>
