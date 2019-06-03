@@ -22,6 +22,7 @@ classes/
 buildSrc/build
 /spring-*/build
 /src/asciidoc/build
+#注意此设置，spring在编译时候需要此目录的类，但是默认设置为了忽略，所以上传Git的是时候没有目录，导致clone下来的工程无法编译
 target/
 
 # Eclipse artifacts, including WTP generated manifests
