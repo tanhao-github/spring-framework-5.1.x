@@ -36,4 +36,12 @@ public class UserInfo {
 		this.age = age;
 	}
 
+	@Override
+	public String toString() {
+		return "UserInfo{" +
+				"name='" + name + '\'' +
+				", addr='" + addr + '\'' +
+				", age=" + age +
+				'}';
+	}
 }
