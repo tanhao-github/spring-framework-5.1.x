@@ -1,0 +1,16 @@
+1.从idea检出或直接下载源代码的zip包
+
+2.进入项目目录
+
+3.安装Gradle,JDK8以上（自行百度）
+
+4.执行 ./gradlew :spring-oxm:compileTestJava  先对 Spring-oxm 模块进行预编译
+
+5.执行 ./gradlew build -x test  编译，整个Spring的源码。 后面的 -x test  是编译期间忽略测试用例，需要加上这个，Spring的测试用例，有些是编译不过的。
+
+6.在IDEA中 File -> New -> Project from Existing Sources -> Navigate to directory ，选择Spring源码目录，导入，然后IDEA会自动的使用Gradle进行构建。
+
+7.排除 spring-aspects  项目，这个是Spring 的AOP体系集成了 aspects（选中  spring-aspects  项目 右键，选择“Load/Unload Moudules”，选中spring-aspects项目然后unload）
+
+参考链接：https://blog.csdn.net/u013310075/article/details/80707098
+
