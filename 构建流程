@@ -10,7 +10,7 @@
 
 6.在IDEA中 File -> New -> Project from Existing Sources -> Navigate to directory ，选择Spring源码目录，导入，然后IDEA会自动的使用Gradle进行构建。
 
-7.排除 spring-aspects  项目，这个是Spring 的AOP体系集成了 aspects（选中  spring-aspects  项目 右键，选择“Load/Unload Moudules”，选中spring-aspects项目然后unload）
+7.排除 spring-aspects  项目（步骤可以忽略，貌似5.1.x的版本不排除也不会报错），这个是Spring 的AOP体系集成了 aspects（选中  spring-aspects  项目 右键，选择“Load/Unload Moudules”，选中spring-aspects项目然后unload）
 
 参考链接：https://blog.csdn.net/u013310075/article/details/80707098
 
