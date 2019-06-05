@@ -17,6 +17,9 @@
 package org.springframework.core;
 
 /**
+ *
+ * 别名注册，每个bean都又一个beanName，也有多个alisa。但是从接口看来，name是key，alias是一个list。通过beanName查询alias，无法通过alias查询bean。
+ *
  * Common interface for managing aliases. Serves as super-interface for
  * {@link org.springframework.beans.factory.support.BeanDefinitionRegistry}.
  *

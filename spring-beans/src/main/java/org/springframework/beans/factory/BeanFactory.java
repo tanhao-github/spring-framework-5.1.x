@@ -21,6 +21,12 @@ import org.springframework.core.ResolvableType;
 import org.springframework.lang.Nullable;
 
 /**
+ *
+ * 系列解读文章：https://my.oschina.net/u/1261452/blog/1858324
+ *
+ * 通过方法的声明可以看出BeanFactory负责通过beanName与class获得bean，通过beanName识别bean的一些特性。
+ * 比如是否是单例，类型是什么，别名又那些。
+ *
  * The root interface for accessing a Spring bean container.
  * This is the basic client view of a bean container;
  * further interfaces such as {@link ListableBeanFactory} and

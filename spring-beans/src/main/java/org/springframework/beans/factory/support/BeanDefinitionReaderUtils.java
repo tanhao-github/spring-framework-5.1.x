@@ -131,6 +131,9 @@ public abstract class BeanDefinitionReaderUtils {
 	}
 
 	/**
+	 *
+	 * 确保bean名称在容器中是唯一的，通过增加序列号的方式
+	 *
 	 * Turn the given bean name into a unique bean name for the given bean factory,
 	 * appending a unique counter as suffix if necessary.
 	 * @param beanName the original bean name

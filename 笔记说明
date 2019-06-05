@@ -1,0 +1,20 @@
+bean中的接口的默认实现：
+  SimpleAliasRegistry 实现了 AliasRegistry
+  DefaultSingletonBeanRegistry 实现了 SingletonBeanRegistry
+  FactoryBeanRegistrySupport 继承了 DefaultSingletonBeanRegistry
+  AbstractBeanFactory 实现了 ConfigurableBeanFactory,HierarchicalBeanFactory,BeanFactory
+  AbstractAutowireCapableBeanFactory 实现了 AutowireCapableBeanFactory
+  DefaultListableBeanFactory 实现了 ConfigurableListableBeanFactory，BeanDefinitionRegistry，ListableBeanFactory
+
+关于SimpleAliasRegistry：
+  使用到别名注册的类和方法：
+    ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForBeanMethod
+    bean注解方式设置别名
+    DefaultBeanDefinitionDocumentReader.processAliasRegistration
+    BeanDefinitionReaderUtils.registerBeanDefinition
+
+    总结：
+    一个bean可以对应多个alias
+    通过beanName得到alias需要遍历整个map，很多操作都会遍历整个map
+    别名是否覆盖，如果不允许覆盖，就报异常
+    从别人的获取方式看来，alias基本没有作用。@bean基本不会用name，xml已经被淘汰了。BeanDefinitionHolder更加不会又人用了。所以AliasRegistry与SimpleAliasRegistry基本无用。

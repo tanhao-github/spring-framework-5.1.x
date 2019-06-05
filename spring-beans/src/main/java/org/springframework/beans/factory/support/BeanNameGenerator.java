@@ -21,6 +21,10 @@ import org.springframework.beans.factory.config.BeanDefinition;
 /**
  * Strategy interface for generating bean names for bean definitions.
  *
+ * 获取bean的bean名称，例如在当我们使用@service等注解的时候，没有指定bean的名称，此时需要根据bean的定义生成名称
+ *
+ * 参考资料：https://my.oschina.net/u/1261452/blog/1801885
+ *
  * @author Juergen Hoeller
  * @since 2.0.3
  */

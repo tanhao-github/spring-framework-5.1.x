@@ -517,6 +517,7 @@ public abstract class ClassUtils {
 	}
 
 	/**
+	 * 判断两个类的继承关系
 	 * Check if the right-hand side type may be assigned to the left-hand side
 	 * type, assuming setting by reflection. Considers primitive wrapper
 	 * classes as assignable to the corresponding primitive types.
