@@ -161,6 +161,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	@Override
 	@Nullable
 	public Object getSingleton(String beanName) {
+		//true 表示bean进行早期依赖
 		return getSingleton(beanName, true);
 	}
 
@@ -174,15 +175,23 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
+		//检查当前获取bean是否已经被缓存
 		Object singletonObject = this.singletonObjects.get(beanName);
+		//如果bean没有被缓存 且 正在被创建中
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
 			synchronized (this.singletonObjects) {
+				//获取此beanName的早期创建的对象
 				singletonObject = this.earlySingletonObjects.get(beanName);
+				//如果beanName没有早期依赖，且此beanName允许早期依赖
 				if (singletonObject == null && allowEarlyReference) {
+					//在某些方法需要提前初始化的时候会调用在某些方法需要提前初始化的时候会调用addSingletonFactory方法将对应的ObjectFactory初始化策略存储在方法将对应的ObjectFactory初始化策略存储在 this.singletonFactories 中
+					//AbstractAutowireCapableBeanFactory.doCreateBean 方法在创建之前，调用addSingletonFactory方法进行提前曝光
 					ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 					if (singletonFactory != null) {
 						singletonObject = singletonFactory.getObject();
+						//加入早期创建的对象中，此时的对象并不完整
 						this.earlySingletonObjects.put(beanName, singletonObject);
+						//从单例工厂Map中移除
 						this.singletonFactories.remove(beanName);
 					}
 				}
@@ -212,6 +221,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 				if (logger.isDebugEnabled()) {
 					logger.debug("Creating shared instance of singleton bean '" + beanName + "'");
 				}
+				//对即将创建的bean进行预先处理，将beanName加入到正在创建beanName集合中
 				beforeSingletonCreation(beanName);
 				boolean newSingleton = false;
 				boolean recordSuppressedExceptions = (this.suppressedExceptions == null);
@@ -242,6 +252,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					if (recordSuppressedExceptions) {
 						this.suppressedExceptions = null;
 					}
+					//将beanName从正在创建的beanName集合中移除
 					afterSingletonCreation(beanName);
 				}
 				if (newSingleton) {
