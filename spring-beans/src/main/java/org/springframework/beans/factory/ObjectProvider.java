@@ -25,6 +25,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.lang.Nullable;
 
 /**
+ *
+ * spring 4.3提供的注入方式，针对构造方法依赖注入做的可选方式
+ *
  * A variant of {@link ObjectFactory} designed specifically for injection points,
  * allowing for programmatic optionality and lenient not-unique handling.
  *

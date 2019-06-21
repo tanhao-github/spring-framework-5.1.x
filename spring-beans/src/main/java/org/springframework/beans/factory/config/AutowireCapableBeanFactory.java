@@ -65,6 +65,7 @@ import org.springframework.lang.Nullable;
 public interface AutowireCapableBeanFactory extends BeanFactory {
 
 	/**
+	 * 成员变量使用@Autowire，可以不指定注入模式
 	 * Constant that indicates no externally defined autowiring. Note that
 	 * BeanFactoryAware etc and annotation-driven injection will still be applied.
 	 * @see #createBean
@@ -74,6 +75,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	int AUTOWIRE_NO = 0;
 
 	/**
+	 * 以下两种针对不使用注解与构造方法，必须有seter方法
 	 * Constant that indicates autowiring bean properties by name
 	 * (applying to all bean property setters).
 	 * @see #createBean
@@ -92,6 +94,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	int AUTOWIRE_BY_TYPE = 2;
 
 	/**
+	 * 通过没有注解且有构造器
 	 * Constant that indicates autowiring the greediest constructor that
 	 * can be satisfied (involves resolving the appropriate constructor).
 	 * @see #createBean
