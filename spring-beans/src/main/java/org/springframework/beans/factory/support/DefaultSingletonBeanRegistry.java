@@ -184,7 +184,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 				singletonObject = this.earlySingletonObjects.get(beanName);
 				//如果beanName没有早期依赖，且此beanName允许早期依赖
 				if (singletonObject == null && allowEarlyReference) {
-					//在某些方法需要提前初始化的时候会调用在某些方法需要提前初始化的时候会调用addSingletonFactory方法将对应的ObjectFactory初始化策略存储在方法将对应的ObjectFactory初始化策略存储在 this.singletonFactories 中
+					//在某些方法需要提前初始化的时候会调用addSingletonFactory方法将对应的ObjectFactory初始化策略存储在 this.singletonFactories 中
 					//AbstractAutowireCapableBeanFactory.doCreateBean 方法在创建之前，调用addSingletonFactory方法进行提前曝光
 					ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 					if (singletonFactory != null) {

@@ -169,7 +169,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	/** Names of beans that have already been created at least once. 已经创建至少一次的bean的名称。 */
 	private final Set<String> alreadyCreated = Collections.newSetFromMap(new ConcurrentHashMap<>(256));
 
-	/** Names of beans that are currently in creation. 当前正在创建的bean名称 */
+	/** Names of beans that are currently in creation. 正在创建的原型bean名称，注意：这里的泛型是Object，查阅源代码发现可以是String或者Set集合 */
 	private final ThreadLocal<Object> prototypesCurrentlyInCreation =
 			new NamedThreadLocal<>("Prototype beans currently in creation");
 
@@ -244,7 +244,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		Object bean;
 
 		// Eagerly check singleton cache for manually registered singletons.
-		//检查bean是否已经注册
+		//直接尝试从缓存获取或者singletonFactories中的ObjectFactory中获取，解决循环依赖，获取单例模式下提前曝光的对象
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
 			if (logger.isTraceEnabled()) {
@@ -256,14 +256,14 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					logger.trace("Returning cached instance of singleton bean '" + beanName + "'");
 				}
 			}
-			//及时bean已经注册，但sharedInstance并不一定是完整的一个bean，需要调用此方法进行再次处理
+			//返回对应的实例，即使bean已经注册，但sharedInstance并不一定是完整的一个bean，需要调用此方法进行再次处理
 			bean = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 
 		else {
 			// Fail if we're already creating this bean instance:
 			// We're assumably within a circular reference.
-			//判断当前beanName是否正在创建
+			//只有在单例模式下才会尝试解决循环依赖，原型模式下如果存在A中有B的属性，B中有A的属性，当依赖注入的时候就会因为A创建未完成的时候因为对于B的创建再次返回创建A，造成循环依赖。
 			if (isPrototypeCurrentlyInCreation(beanName)) {
 				throw new BeanCurrentlyInCreationException(beanName);
 			}
@@ -291,19 +291,20 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 			}
 
+			//对于需要创建的bean进行记录
 			if (!typeCheckOnly) {
 				//标记当前bean，加入到 alreadyCreated （被创建过的bean中）
 				markBeanAsCreated(beanName);
 			}
 
 			try {
-				//得到完成的bean定义
+				//得到完整的bean定义，包括合并父类的相关属性等
 				final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				//检查bean定义，主要判断是否是抽象bean
 				checkMergedBeanDefinition(mbd, beanName, args);
 
 				// Guarantee initialization of beans that the current bean depends on.
-				//获取当前bean的依赖bean，保证此bean所以来的bean先创建
+				//获取当前bean的依赖bean，保证当前bean所依赖的bean的初始化。
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
 					for (String dep : dependsOn) {
@@ -1040,6 +1041,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
+	 * 根据beanName返回当前原型bean是否正在创建
 	 * Return whether the specified prototype bean is currently in creation
 	 * (within the current thread).
 	 * @param beanName the name of the bean
@@ -1051,6 +1053,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
+	 * 创建原型实例之前加入到正在创建的原型实例名称缓存中，用于判断原型循环依赖校验
+	 * 逻辑说明：
+	 * 	如果第一次加入，则缓存的类型是String，如果多次则变为Set集合
 	 * Callback before prototype creation.
 	 * <p>The default implementation register the prototype as currently in creation.
 	 * @param beanName the name of the prototype about to be created
@@ -1075,6 +1080,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
+	 * 原型实例创建完成之后回调，主要是移除已经创建的原型
 	 * Callback after prototype creation.
 	 * <p>The default implementation marks the prototype as not in creation anymore.
 	 * @param beanName the name of the prototype that has been created
